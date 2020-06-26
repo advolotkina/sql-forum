@@ -16,6 +16,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+import java.util.*
+import org.springframework.security.config.annotation.web.builders.WebSecurity
+
 
 @Configuration
 @EnableWebSecurity
@@ -23,10 +29,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 class WebSecurityConfig : WebSecurityConfigurerAdapter() {
 
     @Autowired
-    internal var userDetailsService: UserDetailsServiceImpl? = null
+    lateinit var userDetailsService: UserDetailsServiceImpl
 
     @Autowired
-    private val unauthorizedHandler: JwtAuthEntryPoint? = null
+    lateinit var unauthorizedHandler: JwtAuthEntryPoint
 
     @Bean
     fun bCryptPasswordEncoder(): BCryptPasswordEncoder {
@@ -51,12 +57,23 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
         return super.authenticationManagerBean()
     }
 
+    @Bean
+    fun corsConfigurationSource(): CorsConfigurationSource {
+        val configuration = CorsConfiguration()
+        configuration.allowedOrigins = Arrays.asList("http://localhost:8888","http://localhost:8080", "http://localhost:8081", "https://forum-training-project.herokuapp.com/")
+        configuration.allowedHeaders = Arrays.asList("*")
+        configuration.allowedMethods = Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")
+        configuration.allowCredentials = true
+        configuration.maxAge = 3600
+        val source = UrlBasedCorsConfigurationSource()
+        source.registerCorsConfiguration("/**", configuration)
+        return source
+    }
+
     @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
-        //http.cors().and().csrf().disable().authorizeRequests()
-        //http.addFilterBefore(corsFilter(), SessionManagementFilter::class.java)
-        /*.and()*/
         http
+                .cors().and()
                 .csrf().disable().authorizeRequests()
                 .antMatchers("/**").permitAll()
                 .anyRequest().authenticated()
@@ -66,5 +83,10 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter::class.java)
         http.headers().cacheControl().disable()
+    }
+
+    @Throws(Exception::class)
+    override fun configure(web: WebSecurity) {
+        web.ignoring().antMatchers("/api/signin", "/api/signup")
     }
 }
