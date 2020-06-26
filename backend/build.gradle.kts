@@ -24,10 +24,12 @@ dependencies {
 	runtimeOnly(project(":frontend"))
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-//	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-web"){
 		exclude(module = "spring-boot-starter-tomcat")
 	}
+	implementation("io.jsonwebtoken:jjwt:0.9.0")
+	implementation("io.jsonwebtoken:jjwt-api:0.10.6")
 	implementation("org.postgresql:postgresql")
 	implementation("org.springframework.boot:spring-boot-starter-jetty")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")

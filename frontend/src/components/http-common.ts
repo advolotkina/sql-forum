@@ -1,8 +1,11 @@
 import axios from "axios";
 
 export default axios.create({
-    baseURL: "http://localhost:8888/api/v1.0",
+    baseURL: "/api/v1.0",
     headers: {
-        "Content-type": "application/json"
+        'Access-Control-Allow-Origin': ['http://localhost:8888', 'http://localhost:8081'],
+        'Access-Control-Allow-Methods': 'GET,POST,DELETE,PUT,OPTIONS',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Credentials': true
     }
 });

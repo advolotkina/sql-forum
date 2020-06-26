@@ -11,9 +11,9 @@ class RoleEntity(
     val id: Int,
 
     @Column(nullable = false)
-    val name: String
+    var name: String,
 
-//    @JsonBackReference
-//    @OneToMany(mappedBy = "userRole", fetch=FetchType.LAZY)
-//    var users: MutableList<UserEntity> = mutableListOf()
+    @JsonBackReference
+    @OneToMany(mappedBy = "userRole", fetch=FetchType.EAGER)
+    var users: MutableList<UserEntity> = mutableListOf()
 )

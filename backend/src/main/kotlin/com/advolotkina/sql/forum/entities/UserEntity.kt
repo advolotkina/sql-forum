@@ -10,7 +10,7 @@ import javax.persistence.*
 @Table(name = "users")
 class UserEntity(
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Int,
 
         @Column(nullable = false, unique = true)
@@ -25,40 +25,39 @@ class UserEntity(
         @Column(nullable = false)
         var name: String,
 
-        @Column(nullable = false)
-        val registration_date: Timestamp = Timestamp(Instant.now().epochSecond),
-
-        @Column(nullable = false)
-        var is_banned: Boolean = false,
-
-        @Column(nullable = false)
-        var comments_count: Int = 0,
+        @Column(nullable = true)
+        val registration_date: Timestamp? = Timestamp(Instant.now().epochSecond),
 
         @Column(nullable = true)
-        val last_comment: Timestamp,
+        var is_banned: Boolean? = false,
 
         @Column(nullable = true)
-        var timezone_offset: Int,
+        var comments_count: Int? = 0,
 
         @Column(nullable = true)
-        var location: String,
+        val last_comment: Timestamp? = null,
 
         @Column(nullable = true)
-        var profession: String,
+        var timezone_offset: Int? = 0,
 
         @Column(nullable = true)
-        var extra_info: String,
+        var location: String? = "",
 
         @Column(nullable = true)
-        var signature: String,
+        var profession: String? = "",
 
-        @Column
-        var user_pic: String? = null,
+        @Column(nullable = true)
+        var extra_info: String? = "",
 
+        @Column(nullable = true)
+        var signature: String? = "",
 
-        @ManyToOne(fetch = FetchType.LAZY)
+        @Column(nullable = true)
+        var user_pic: String? = "",
+
+        @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "role_id")
-        val userRole: RoleEntity,
+        var userRole: RoleEntity? = null,
 
         @Transient
         @JsonBackReference

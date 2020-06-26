@@ -1,14 +1,33 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-      <router-link to="/themes">Forum Themes</router-link>
+      <router-link to="/home">Home</router-link> |
+      <router-link to="/about">About</router-link> |
+      <router-link to="/themes">Forum Themes</router-link> |
+      <router-link to="/login" v-if="!this.$store.getters.isAuthenticated">Login</router-link>
+      <a href="#" class="nav-link text-dark" v-if="this.$store.getters.isAuthenticated" v-on:click="logout">Logout </a>
     </div>
     <router-view />
   </div>
 </template>
-
+<script lang="ts">
+  import AuthService from "@/services/AuthService";
+  import { Component, Vue } from "vue-property-decorator";
+  @Component
+  export default class App  extends Vue {
+    logout(){
+      // this.$store.dispatch('logout');
+      // this.$router.push('/');
+      AuthService.logout().then(response => {
+        console.log(response.statusText);
+        this.$store.dispatch('logout');
+        this.$router.push('/');
+        }).catch((e) => {
+        console.log(e);
+        });
+    }
+  }
+</script>
 <style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
