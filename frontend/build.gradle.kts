@@ -9,7 +9,7 @@ plugins {
     id("java")
 }
 
-group = "com.trainig project"
+group = "com.advolotkina.sql.forum"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
 

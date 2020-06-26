@@ -8,19 +8,23 @@ plugins {
 	kotlin("plugin.jpa") version "1.3.72"
 }
 
-group = "com.advolotkina.sql"
+group = "com.advolotkina.sql.forum"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
 	mavenCentral()
 }
-
+allOpen {
+	annotation("javax.persistence.Entity")
+	annotation("javax.persistence.MappedSuperclass")
+	annotation("javax.persistence.Embeddable")
+}
 dependencies {
 	runtimeOnly(project(":frontend"))
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.springframework.boot:spring-boot-starter-security")
+//	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-web"){
 		exclude(module = "spring-boot-starter-tomcat")
 	}

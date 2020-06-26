@@ -8,4 +8,4 @@
  */
 
 rootProject.name = "training_project"
-include(":frontend", ":forum")
+include(":frontend", ":backend")

@@ -22,12 +22,12 @@ create table users (
 );
 create table groups(
     id serial primary key,
-    name varchar(255) not null
+    name varchar(255) not null unique
 );
 create table themes(
     id serial primary key,
-    name varchar(255) not null,
-    comments_count integer,
+    name varchar(255) not null unique,
+    comments_count integer default 0,
     last_comment timestamp,
     url varchar(255),
     group_id integer references groups(id)
