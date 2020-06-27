@@ -9,13 +9,13 @@ import javax.persistence.*
 @Table(name = "groups")
 class GroupEntity(
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Int,
 
         @Column(nullable = false)
-        val name: String
+        val name: String,
 
-//        @JsonBackReference
-//        @OneToMany(mappedBy = "group", fetch=FetchType.LAZY)
-//        var themes: MutableList<ThemeEntity> = mutableListOf()
+        @JsonManagedReference
+        @OneToMany(mappedBy = "group", fetch=FetchType.LAZY)
+        var themes: MutableList<ThemeEntity> = mutableListOf()
 )

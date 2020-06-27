@@ -25,34 +25,34 @@ class UserEntity(
         @Column(nullable = false)
         var name: String,
 
-        @Column(nullable = true)
-        val registration_date: Timestamp? = Timestamp(Instant.now().epochSecond),
+        @Column
+        val registration_date: Timestamp? = Timestamp(System.currentTimeMillis()),
 
-        @Column(nullable = true)
+        @Column
         var is_banned: Boolean? = false,
 
-        @Column(nullable = true)
+        @Column
         var comments_count: Int? = 0,
 
-        @Column(nullable = true)
+        @Column
         val last_comment: Timestamp? = null,
 
-        @Column(nullable = true)
+        @Column
         var timezone_offset: Int? = 0,
 
-        @Column(nullable = true)
+        @Column
         var location: String? = "",
 
-        @Column(nullable = true)
+        @Column
         var profession: String? = "",
 
-        @Column(nullable = true)
+        @Column
         var extra_info: String? = "",
 
-        @Column(nullable = true)
+        @Column
         var signature: String? = "",
 
-        @Column(nullable = true)
+        @Column
         var user_pic: String? = "",
 
         @ManyToOne(fetch = FetchType.EAGER)
@@ -79,5 +79,4 @@ class UserEntity(
 //                joinColumns = arrayOf(JoinColumn(name = "user_id", referencedColumnName = "id")),
 //                inverseJoinColumns = arrayOf(JoinColumn(name = "theme_id", referencedColumnName = "id")))
 //        var themesFavedByUser: MutableList<ThemeEntity> = mutableListOf()
-//curl -d '{"name":"AAA", "groupId":"1"}' -H "Content-Type: application/json" -X POST http://localhost:8888/themes
 )

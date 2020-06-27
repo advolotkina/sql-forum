@@ -12,7 +12,7 @@ import javax.persistence.*
 @Table(name = "themes")
 class ThemeEntity(
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Int,
 
         @Column(nullable = false, unique = true)
@@ -22,11 +22,12 @@ class ThemeEntity(
         var comments_count: Int = 0,
 
         @Column
-        var last_comment: Timestamp = Timestamp(Instant.now().epochSecond),
+        var last_comment: Timestamp = Timestamp(System.currentTimeMillis()),
 
         @Column
         var url: String = "/themes/$id",
 
+        @JsonBackReference
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "group_id")
         var group: GroupEntity,

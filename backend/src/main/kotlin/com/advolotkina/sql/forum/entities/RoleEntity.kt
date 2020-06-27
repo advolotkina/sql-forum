@@ -7,7 +7,7 @@ import javax.persistence.*
 @Table(name = "roles")
 class RoleEntity(
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int,
 
     @Column(nullable = false)

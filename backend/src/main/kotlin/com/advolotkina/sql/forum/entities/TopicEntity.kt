@@ -10,7 +10,7 @@ import javax.persistence.*
 @Table(name = "topics")
 class TopicEntity(
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Int,
 
         @Column(nullable = false)
@@ -19,20 +19,20 @@ class TopicEntity(
         @Column(nullable = false)
         var description: String,
 
-        @Column(nullable = false)
-        val creation_datetime: Timestamp = Timestamp(Instant.now().epochSecond),
+        @Column
+        val creation_datetime: Timestamp? = Timestamp(System.currentTimeMillis()),
 
-        @Column(nullable = false)
-        var views: Int = 0,
+        @Column
+        var views: Int? = 0,
 
-        @Column(nullable = true)
-        var last_comment: Timestamp?,
+        @Column
+        var last_comment: Timestamp? = Timestamp(System.currentTimeMillis()),
 
-        @Column(nullable = false)
-        var comments_count: Int = 0,
+        @Column
+        var comments_count: Int? = 0,
 
-        @Column(nullable = false)
-        val url: String = "/themes/topics/$id",
+        @Column
+        val url: String? = "/themes/topics/$id",
 
         @JsonBackReference
         @ManyToOne(fetch = FetchType.LAZY)

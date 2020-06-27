@@ -8,7 +8,7 @@ import javax.persistence.*
 @Table(name = "comment_attachments")
 class CommentAttachmentEntity(
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Int,
 
         @Column(nullable = false)

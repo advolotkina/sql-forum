@@ -1,10 +1,11 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/home">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/themes">Forum Themes</router-link> |
-      <router-link to="/login" v-if="!this.$store.getters.isAuthenticated">Login</router-link>
+      <router-link to="/home">Home | </router-link>
+      <router-link to="/themes">Темы [Админ]| </router-link>
+      <router-link to="/groups">Темы | </router-link>
+      <router-link to="/login" v-if="!this.$store.getters.isAuthenticated">Login | </router-link>
+      <router-link to="/register" v-if="!this.$store.getters.isAuthenticated">Register | </router-link>
       <a href="#" class="nav-link text-dark" v-if="this.$store.getters.isAuthenticated" v-on:click="logout">Logout </a>
     </div>
     <router-view />

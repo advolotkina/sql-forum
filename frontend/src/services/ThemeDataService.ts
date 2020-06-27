@@ -4,30 +4,18 @@ class ThemeDataService {
     getAll() {
         return http.get("/themes");
     }
-
-    // get(id: string) {
-    //     return http.get(`/tutorials/${id}`);
-    // }
-    //
-    // create(data: any) {
-    //     return http.post("/tutorials", data);
-    // }
-    //
-    // update(id: string, data: any) {
-    //     return http.put(`/tutorials/${id}`, data);
-    // }
-    //
-    // delete(id: string) {
-    //     return http.delete(`/tutorials/${id}`);
-    // }
-    //
-    // deleteAll() {
-    //     return http.delete(`/tutorials`);
-    // }
-    //
-    // findByTitle(title: string) {
-    //     return http.get(`/tutorials?title=${title}`);
-    // }
+    get(id: string) {
+        return http.get(`/themes/${id}`);
+    }
+    create(data: any){
+        return http.post("/themes", data);
+    }
+    getGroups(){
+        return http.get("/groups");
+    }
+    delete(id: number) {
+        return http.delete(`/themes/${id}`);
+    }
 }
 
 export default new ThemeDataService();

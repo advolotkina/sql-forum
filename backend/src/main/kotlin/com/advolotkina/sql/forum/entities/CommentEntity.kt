@@ -9,17 +9,17 @@ import javax.persistence.*
 @Table(name = "comments")
 class CommentEntity(
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Int,
 
         @Column(nullable = false)
         var comment_text: String,
 
-        @Column(nullable = false)
-        var datetime: Timestamp,
+        @Column
+        var datetime: Timestamp? = Timestamp(System.currentTimeMillis()),
 
-        @Column(nullable = false)
-        var url: String,
+        @Column
+        var url: String? = "",
 
         @JsonBackReference
         @ManyToOne(fetch = FetchType.LAZY)

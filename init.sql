@@ -85,10 +85,12 @@ CREATE OR REPLACE FUNCTION update_comments_count_and_datetime() RETURNS TRIGGER 
         IF (TG_OP = 'DELETE') THEN
             update topics set comments_count = comments_count - 1 where id = OLD.topic_id;
             update users set comments_count = comments_count - 1 where id = OLD.author_id;
+            update themes set comments_count = comments_count - 1 where id = (select theme_id from topics where id = OLD.topic_id);
             RETURN OLD;
         ELSIF (TG_OP = 'INSERT') THEN
             update topics set comments_count = comments_count + 1, last_comment = NEW.datetime where id = NEW.topic_id;
             update users set comments_count = comments_count + 1, last_comment = NEW.datetime where id = NEW.author_id;
+            update themes set comments_count = comments_count + 1, last_comment = NEW.datetime where id = (select theme_id from topics where id = NEW.topic_id);
             RETURN NEW;
         END IF;
         RETURN NULL;
