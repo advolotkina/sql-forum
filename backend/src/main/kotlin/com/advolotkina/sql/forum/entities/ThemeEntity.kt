@@ -40,8 +40,9 @@ class ThemeEntity(
         @JoinTable(name = "theme_admins",
                 joinColumns = arrayOf(JoinColumn(name = "theme_id", referencedColumnName = "id")),
                 inverseJoinColumns = arrayOf(JoinColumn(name = "admin_id", referencedColumnName = "id")))
-        var themeAdmins: MutableList<UserEntity> = mutableListOf()
+        var themeAdmins: MutableList<UserEntity> = mutableListOf(),
 
-//        @ManyToMany(mappedBy = "themesFavedByUser", fetch=FetchType.LAZY)
-//        var users_faved_this_theme: MutableList<UserEntity> = mutableListOf()
+        @Transient
+        @ManyToMany(mappedBy = "themesFavedByUser", fetch=FetchType.LAZY)
+        var users_faved_this_theme: MutableList<UserEntity> = mutableListOf()
 )

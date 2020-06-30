@@ -1,7 +1,8 @@
 module.exports = {
-    outputDir: 'build/dist',
-    assetsDir: 'static',
-    devServer: {
-        port: 8081
-    }
-}
+  outputDir: "build/dist",
+  assetsDir: "static",
+  devServer: {
+    port: 8081
+  },
+  transpileDependencies: ["vuetify"]
+};

@@ -59,9 +59,8 @@ class UserEntity(
         @JoinColumn(name = "role_id")
         var userRole: RoleEntity? = null,
 
-        @Transient
         @JsonBackReference
-        @OneToMany(mappedBy = "topicAuthor", fetch=FetchType.LAZY)
+        @OneToMany(mappedBy = "topicAuthor", fetch=FetchType.EAGER)
         var topicsCreatedByUser: MutableList<TopicEntity> = mutableListOf(),
 
         @Transient
@@ -70,13 +69,13 @@ class UserEntity(
         var commentsCreatedByUser: MutableList<CommentEntity> = mutableListOf(),
 
         @Transient
-        @ManyToMany(mappedBy = "themeAdmins", fetch=FetchType.LAZY)
-        var themesAdminedByUser: MutableList<ThemeEntity> = mutableListOf()
+        @ManyToMany(mappedBy = "themeAdmins", fetch=FetchType.EAGER)
+        var themesAdminedByUser: MutableList<ThemeEntity> = mutableListOf(),
 
-//        @Transient
-//        @ManyToMany(fetch=FetchType.LAZY)
-//        @JoinTable(name = "user_fav_themes",
-//                joinColumns = arrayOf(JoinColumn(name = "user_id", referencedColumnName = "id")),
-//                inverseJoinColumns = arrayOf(JoinColumn(name = "theme_id", referencedColumnName = "id")))
-//        var themesFavedByUser: MutableList<ThemeEntity> = mutableListOf()
+        @Transient
+        @ManyToMany(fetch=FetchType.EAGER)
+        @JoinTable(name = "user_fav_themes",
+                joinColumns = arrayOf(JoinColumn(name = "user_id", referencedColumnName = "id")),
+                inverseJoinColumns = arrayOf(JoinColumn(name = "theme_id", referencedColumnName = "id")))
+        var themesFavedByUser: MutableList<ThemeEntity> = mutableListOf()
 )

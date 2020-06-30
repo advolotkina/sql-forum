@@ -29,7 +29,6 @@ create table themes(
     name varchar(255) not null unique,
     comments_count integer default 0,
     last_comment timestamp,
-    url varchar(255),
     group_id integer references groups(id)
 );
 create table user_fav_themes(
@@ -48,7 +47,6 @@ create table topics(
     views integer,
     last_comment timestamp,
     comments_count integer default 0,
-    url varchar(255),
     theme_id integer references themes(id),
     author_id integer references users(id)
 );
@@ -56,7 +54,6 @@ create table comments(
     id serial primary key,
     comment_text text,
     datetime timestamp default current_timestamp,
-    url varchar(255),
     topic_id integer references topics(id) on delete cascade,
     author_id integer references users(id)
 );

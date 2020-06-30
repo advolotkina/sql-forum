@@ -2,6 +2,7 @@ package com.advolotkina.sql.forum.controllers
 
 import com.advolotkina.sql.forum.dto.NewTopic
 import com.advolotkina.sql.forum.dto.SaveThemeRequest
+import com.advolotkina.sql.forum.entities.GroupEntity
 import com.advolotkina.sql.forum.entities.ThemeEntity
 import com.advolotkina.sql.forum.entities.TopicEntity
 import com.advolotkina.sql.forum.entities.UserEntity
@@ -38,12 +39,42 @@ class ThemesController {
     @GetMapping("/{id}")
     fun getTheme(@PathVariable id: Int) = themeRepository.findById(id)
 
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasRole('admin')")
+    fun updateTheme(@PathVariable id: Int, @RequestBody updateTheme: SaveThemeRequest): ResponseEntity<*> {
+        val themeCandidate: Optional<ThemeEntity> = themeRepository.findById(id)
+        if (themeCandidate.isPresent) {
+            val groupCandidate: Optional<GroupEntity> = groupRepository.findById(updateTheme.groupId)
+            if (groupCandidate.isPresent) {
+                try {
+                    val theme = themeCandidate.get()
+                    theme.name = updateTheme.name
+                    themeRepository.save(theme)
+                } catch (e: Exception) {
+                    return ResponseEntity(ResponseMessage("Server error. Please, contact site owner"),
+                            HttpStatus.SERVICE_UNAVAILABLE)
+                }
+                return ResponseEntity(ResponseMessage("Theme updated"), HttpStatus.OK)
+            }
+            return ResponseEntity(ResponseMessage("Group not found"),
+                    HttpStatus.BAD_REQUEST)
+        }
+
+        return ResponseEntity(ResponseMessage("Theme not found"),
+                HttpStatus.BAD_REQUEST)
+    }
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('admin')")
     fun deleteTheme(@PathVariable id: Int): ResponseEntity<*> {
         val themeCandidate: Optional<ThemeEntity> = themeRepository.findById(id)
         if(themeCandidate.isPresent){
-            themeRepository.delete(themeCandidate.get())
+            try{
+                themeRepository.delete(themeCandidate.get())
+            } catch (e: Exception) {
+                println(e.message)
+                return ResponseEntity(ResponseMessage("Server error. Please, contact site owner"),
+                        HttpStatus.SERVICE_UNAVAILABLE)
+            }
             return ResponseEntity(ResponseMessage("Theme deleted"), HttpStatus.OK)
         }
         return ResponseEntity(ResponseMessage("Theme doesn't exist"),

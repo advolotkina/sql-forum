@@ -71,7 +71,7 @@ class AuthController() {
             cookie.path = "/"
             response.addCookie(cookie)
             val role = user.userRole
-            return ResponseEntity.ok(SuccessfulSigninResponse(user.login, role!!.name))
+            return ResponseEntity.ok(SuccessfulSigninResponse(user.login, role!!.name, user.id.toString()))
         } else {
             return ResponseEntity(ResponseMessage("User not found!"),
                     HttpStatus.BAD_REQUEST)
