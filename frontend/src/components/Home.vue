@@ -14,11 +14,11 @@
       </p>
 
       <router-link to="/login" v-if="!this.$store.getters.isAuthenticated">
-        <b-button variant="primary">Login</b-button>
+        <b-button>Login</b-button>
       </router-link>
 
       <router-link to="/register" v-if="!this.$store.getters.isAuthenticated">
-        <b-button variant="primary">Register</b-button>
+        <b-button>Register</b-button>
       </router-link>
     </b-jumbotron>
   </div>

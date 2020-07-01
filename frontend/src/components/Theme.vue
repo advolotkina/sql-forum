@@ -158,17 +158,7 @@ export default class Themes extends Vue {
 
     this.close();
   }
-  // deleteTheme(){
-  //     ThemeDataService.delete(this.theme.id)
-  //         .then((response) => {
-  //             this.theme.id = null;
-  //             console.log(response.data);
-  //             this.retrieveThemes();
-  //         })
-  //         .catch((e) => {
-  //             console.log(e);
-  //         });
-  // }
+
   retrieveThemes() {
     ThemeDataService.getAll()
       .then(response => {

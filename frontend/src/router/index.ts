@@ -28,11 +28,6 @@ const routes: Array<RouteConfig> = [
     name: "SignUp",
     component: () => import("../components/SignUp.vue")
   },
-  // {
-  //   path: "/add_theme",
-  //   name: "AddTheme",
-  //   component: () => import("../components/AddTheme.vue")
-  // },
   {
     path: "/groups",
     name: "Groups",
@@ -62,14 +57,6 @@ const routes: Array<RouteConfig> = [
       permission: 'user',
     },
   },
-  {
-    path: "/change_profile",
-    name: "ChangeProfile",
-    component: () => import("../components/ChangeUserProfile.vue"),
-    meta: {
-      permission: 'user',
-    },
-  }
 ];
 
 const router = new VueRouter({

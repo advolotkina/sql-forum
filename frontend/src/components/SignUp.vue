@@ -62,6 +62,23 @@
         >
       </b-card>
     </div>
+  <v-dialog v-model="errorDialog" max-width="500px">
+    <v-card>
+      <v-card-text>
+        <v-container>
+          <v-row>
+            <v-col cols="12" sm="6" md="4">
+              <v-textarea v-text="message"></v-textarea>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="blue darken-1" text @click="ok">OK</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
   </div>
 </template>
 
@@ -78,6 +95,14 @@ export default class SignIn extends Vue {
     email: ""
   };
 
+  private message: any = "";
+  private errorDialog = false;
+
+  ok(){
+    this.message = "";
+    this.errorDialog = false;
+  }
+
   registerUser() {
     const data = {
       login: this.user.login,
@@ -91,9 +116,12 @@ export default class SignIn extends Vue {
         console.log(response);
         this.$router.push("/login");
       })
-      .catch(e => {
-        console.log(e);
-      });
+       .catch((error) => {
+              if (error.response) {
+                this.message = error.response.data.message;
+                this.errorDialog = true;
+              }
+            });
   }
 }
 </script>

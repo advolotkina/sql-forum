@@ -82,6 +82,7 @@ class ThemesController {
     }
 
     @PostMapping("/{id}")
+    @PreAuthorize("hasAnyRole('user', 'admin')")
     fun createTopic(@PathVariable id: Int, @RequestBody newTopic: NewTopic): ResponseEntity<*>
     {
         val themeCandidate: Optional<ThemeEntity> = themeRepository.findById(id)

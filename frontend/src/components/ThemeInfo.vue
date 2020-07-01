@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div class="mx-auto">
     <table class="table table-striped">
       <thead>
-        <th>Тема</th>
-        <th>Автор</th>
-        <th>Ответов</th>
-        <th>Просмотров</th>
-        <th>Дата</th>
+        <th>Theme name</th>
+        <th>Author</th>
+        <th>Comments</th>
+        <th>Views</th>
+        <th>Last comment</th>
       </thead>
       <tbody>
         <tr v-for="(topic, i) in currentTheme.topics" :key="i">
@@ -22,7 +22,7 @@
           </td>
           <td>{{ topic.comments_count }}</td>
           <td>{{ topic.views }}</td>
-          <td>{{ topic.last_comment }}</td>
+          <td>{{ topic.last_comment | moment("from")}}</td>
         </tr>
       </tbody>
     </table>
@@ -97,8 +97,9 @@
 import { Component, Vue } from "vue-property-decorator";
 import ThemeDataService from "../services/ThemeDataService";
 import TopicService from "@/services/TopicService";
-import { validationMixin } from 'vuelidate'
-import { required, maxLength, email } from 'vuelidate/lib/validators'
+import { validationMixin } from 'vuelidate';
+import { required, maxLength, email } from 'vuelidate/lib/validators';
+import moment from "vue-moment";
 
 @Component
 export default class ThemeInfo extends Vue {

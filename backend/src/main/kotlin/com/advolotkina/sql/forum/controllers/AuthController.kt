@@ -20,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.security.core.AuthenticationException
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletResponse
@@ -57,21 +58,25 @@ class AuthController() {
         val userCandidate: Optional<UserEntity> = userRepository.findByLogin(loginRequest.login!!)
 
         if (userCandidate.isPresent) {
-            println("User is present")
             val user: UserEntity = userCandidate.get()
-            val authentication = authenticationManager.authenticate(
-                    UsernamePasswordAuthenticationToken(loginRequest.login, loginRequest.password))
-            SecurityContextHolder.getContext().setAuthentication(authentication)
-            val jwt: String = jwtProvider.generateJwtToken(user.login!!)
+            try{
+                val authentication = authenticationManager.authenticate(
+                        UsernamePasswordAuthenticationToken(loginRequest.login, loginRequest.password))
+                SecurityContextHolder.getContext().setAuthentication(authentication)
+                val jwt: String = jwtProvider.generateJwtToken(user.login!!)
 
-            val cookie: Cookie = Cookie(authCookieName, jwt)
-            cookie.maxAge = jwtProvider.jwtExpiration!!
-            cookie.secure = isCookieSecure
-            cookie.isHttpOnly = true
-            cookie.path = "/"
-            response.addCookie(cookie)
-            val role = user.userRole
-            return ResponseEntity.ok(SuccessfulSigninResponse(user.login, role!!.name, user.id.toString()))
+                val cookie: Cookie = Cookie(authCookieName, jwt)
+                cookie.maxAge = jwtProvider.jwtExpiration!!
+                cookie.secure = isCookieSecure
+                cookie.isHttpOnly = true
+                cookie.path = "/"
+                response.addCookie(cookie)
+                val role = user.userRole
+                return ResponseEntity.ok(SuccessfulSigninResponse(user.login, role!!.name, user.id.toString()))
+            } catch (e: AuthenticationException){
+                return ResponseEntity(ResponseMessage("Authentication failed"),
+                        HttpStatus.UNAUTHORIZED)
+            }
         } else {
             return ResponseEntity(ResponseMessage("User not found!"),
                     HttpStatus.BAD_REQUEST)

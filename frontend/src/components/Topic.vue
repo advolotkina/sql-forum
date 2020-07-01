@@ -1,11 +1,12 @@
 <template>
-  <div>
-    <h4 class="header" align="left">{{ currentTopic.name }}</h4>
-    <table class="table table-striped">
+  <div class="mx-auto">
+    <h4>{{ currentTopic.name }}</h4>
+    <v-table class="table table-striped">
       <thead>
-        <th>Создатель топика</th>
-        <th>Описание</th>
-        <th>Дата</th>
+        <th>Topic creator</th>
+        <th>Description</th>
+        <th>Date</th>
+        <th v-if="$store.getters.isAdmin">Change or delete</th>
       </thead>
       <tbody>
         <tr>
@@ -18,14 +19,23 @@
           </td>
           <td align="left">{{ currentTopic.description }}</td>
           <td>{{ currentTopic.creation_datetime }}</td>
+          <td v-if="$store.getters.isAdmin">
+            <v-icon small class="mr-2" @click="editItem(currentTopic)">
+              mdi-pencil
+            </v-icon>
+                  <v-icon small @click="deleteItem(currentTopic)">
+                    mdi-delete
+                  </v-icon>
+          </td>
         </tr>
       </tbody>
-    </table>
+    </v-table>
     <table class="table table-striped">
       <thead>
-        <th>Автор</th>
-        <th>Комментарий</th>
-        <th>Дата</th>
+        <th>Author</th>
+        <th>Comment</th>
+        <th>Date</th>
+        <th v-if="$store.getters.isAdmin">Change or delete</th>
       </thead>
       <tbody>
         <tr v-for="(comment, i) in currentTopic.comments" :key="i">
@@ -35,11 +45,19 @@
             </router-link>
           </td>
           <td>{{ comment.comment_text }}</td>
-          <td>{{ comment.datetime }}</td>
+          <td>{{ comment.datetime | moment("from")}}</td>
+          <td v-if="$store.getters.isAdmin">
+            <v-icon small class="mr-2" @click="editComment(i)">
+              mdi-pencil
+            </v-icon>
+            <v-icon small @click="deleteComment(i)">
+              mdi-delete
+            </v-icon>
+          </td>
         </tr>
       </tbody>
     </table>
-    <div class="form-group" v-if="this.$store.getters.isAuthenticated">
+    <div class="form-group" v-if="$store.getters.isAuthenticated">
       <input
         type="text"
         v-model="comment.text"
@@ -58,6 +76,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import TopicService from "../services/TopicService";
 import CommentsService from "@/services/CommentsService";
+import moment from "vue-moment";
 @Component
 export default class Topic extends Vue {
   private currentTopic: any = null;
@@ -67,6 +86,12 @@ export default class Topic extends Vue {
     text: "",
     username: ""
   };
+  editComment(i: number){
+    console.log(i);
+  }
+  deleteComment(i: number){
+    console.log(i);
+  }
   submitComment() {
     const data = {
       commentText: this.comment.text,

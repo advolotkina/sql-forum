@@ -61,7 +61,9 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration()
         configuration.allowedOrigins = Arrays.asList("http://localhost:8888","http://localhost:8080", "http://localhost:8081", "https://forum-training-project.herokuapp.com/")
+//        configuration.allowedOrigins = Arrays.asList("*")
         configuration.allowedHeaders = Arrays.asList("*")
+//        configuration.allowedHeaders = Arrays.asList("X-Requested-With", "Origin", "Content-Type", "Accept", "Authorization")
         configuration.allowedMethods = Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")
         configuration.allowCredentials = true
         configuration.maxAge = 3600

@@ -13,6 +13,7 @@ import com.advolotkina.sql.forum.response.ResponseMessage
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
@@ -32,6 +33,7 @@ class TopicsController {
     fun getTopic(@PathVariable id: Int) = topicRepository.findById(id)
 
     @PostMapping("/{id}")
+    @PreAuthorize("hasAnyRole('user', 'admin')")
     fun createComment(@PathVariable id: Int, @RequestBody newComment: NewComment): ResponseEntity<*>  {
         val topicCandidate: Optional<TopicEntity> = topicRepository.findById(id)
         if (topicCandidate.isPresent) {
