@@ -14,6 +14,9 @@
                     <v-img v-if="currentUser.userPic !== ''" :src="currentUser.userPic" ></v-img>
                     <v-img v-else src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQXrIBnP4Ppijsc0z3IRH6A6mQEs0OSaVlmFw&usqp=CAU" ></v-img>
                 </v-avatar>
+                    <v-card-text>
+                        Click to change image.
+                    </v-card-text>
                 </v-card>
             </v-col>
             <v-col cols="12">
@@ -65,13 +68,16 @@
             <v-card>
                 <v-card-text>
                     <v-container>
+                        <v-form           ref="form"
+                                          v-model="valid"
+                                          lazy-validation>
                         <v-row>
                             <v-col cols="12" sm="6" md="4">
                                 <v-text-field
                                         :counter="255"
-                                        :rules="nameRules"
                                         v-model="editedItem.name"
                                         label="User name"
+                                        :rules="nameRules"
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" md="4">
@@ -91,6 +97,7 @@
                                 ></v-text-field>
                             </v-col>
                         </v-row>
+                        </v-form>
                     </v-container>
                 </v-card-text>
 
@@ -111,6 +118,7 @@
                                         v-model="userPic"
                                         label="New profile image"
                                         filled
+                                        :rules="fileRules"
                                         prepend-icon="mdi-camera"
                                         accept="image/*"
                                 ></v-file-input>
@@ -143,7 +151,6 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-<!--        <v-btn :to="{ path: '/change_profile'}" color="primary">Change</v-btn>-->
     </v-container>
 </template>
 
@@ -160,6 +167,7 @@
         dialog = false;
         avatarDialog = false;
         userPic = null;
+        valid =  false;
         editedItem: any = {
             name: "",
             login: "",
@@ -171,16 +179,17 @@
             email: ""
         };
         nameRules: any = [
+            (v: any) => !!v || 'Name is required',
             v => (v && v.length <= 255) || 'Name must be less than 255 characters',
         ];
         emailRules: any =  [
+            (v: any) => !!v || 'E-mail is required',
             v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+            v => (v && v.length <= 255) || 'Email must be less than 255 characters'
         ];
-        watch: any = {
-            dialog(val) {
-                val || this.close();
-            }
-        };
+        fileRules: any = [
+            (v: any) => !!v || 'File required'
+        ]
         private message: any = "";
         private errorDialog = false;
 
@@ -206,14 +215,19 @@
                 this.userPic = null;
             });
         }
+        validate(): boolean {
+            return (this.$refs.form as Vue & { validate: () => boolean }).validate();
+        }
         save(){
+            if(!this.validate()){
+                return;
+            }
                 const data: any = {};
                 if (this.editedItem.name !== this.currentUser.name){
                     data.name = this.editedItem.name;
                 }
                 if(this.editedItem.login !== this.currentUser.login){
                     data.login = this.editedItem.login;
-
                 }
                 if(this.editedItem.email !== this.currentUser.email){
                     data.email = this.editedItem.email;

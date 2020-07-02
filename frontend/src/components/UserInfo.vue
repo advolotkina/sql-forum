@@ -1,8 +1,5 @@
 <template>
   <div>
-    {{ currentUser.name }}
-    {{ currentUser.email }}
-    {{ currentUser.registration_date }}
     <v-container>
       <v-row dense>
         <v-col cols="12">

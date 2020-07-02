@@ -44,7 +44,7 @@ create table topics(
     name varchar(255) not null,
     description text not null,
     creation_datetime timestamp,
-    views integer,
+    views integer default 0,
     last_comment timestamp,
     comments_count integer default 0,
     theme_id integer references themes(id),

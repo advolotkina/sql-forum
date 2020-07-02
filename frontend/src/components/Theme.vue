@@ -8,15 +8,10 @@
   >
     <template v-slot:top>
       <v-toolbar flat color="white">
-        <v-toolbar-title>Add and edit themes</v-toolbar-title>
+        <v-toolbar-title>Read and edit themes</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="500px">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on"
-              >New Item</v-btn
-            >
-          </template>
           <v-card>
             <v-card-title>
               <span class="headline">{{ formTitle }}</span>
@@ -56,6 +51,24 @@
       <v-btn color="primary" @click="initialize">Reset</v-btn>
     </template>
   </v-data-table>
+      <v-btn color="primary" to="/add_theme">New Theme</v-btn>
+    <v-dialog v-model="errorDialog" max-width="500px">
+      <v-card>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12" sm="6" md="4">
+                <v-textarea v-text="message"></v-textarea>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="ok">OK</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -66,6 +79,8 @@ import TopicService from "@/services/TopicService";
 
 @Component
 export default class Themes extends Vue {
+  private message: any = "";
+  private errorDialog = false;
   private headers: any[] = [
     { text: "Comments count", value: "comments_count" },
     { text: "id", value: "id" },
@@ -81,7 +96,10 @@ export default class Themes extends Vue {
   defaultItem: any = {
     name: ""
   };
-
+  ok(){
+    this.message = "";
+    this.errorDialog = false;
+  }
   computed: any = {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
@@ -92,10 +110,6 @@ export default class Themes extends Vue {
       val || this.close();
     }
   };
-  created() {
-    this.retrieveThemes();
-    console.log(this.themes);
-  }
 
   private themes: any[] = [];
   private theme: any = {
@@ -133,27 +147,20 @@ export default class Themes extends Vue {
   save() {
     const data = {
       name: this.editedItem.name,
-      groupId: 2,
+      groupId: 0
     };
     if (this.editedIndex > -1) {
       ThemeDataService.update(this.editedItem.id, data)
               .then(response => {
                 console.log(response.data);
-                Object.assign(this.themes[this.editedIndex], this.editedItem);
+                this.retrieveThemes();
               })
-              .catch(e => {
-                console.log(e);
+              .catch((error) => {
+                if (error.response) {
+                  this.message = error.response.data.message;
+                  this.errorDialog = true;
+                }
               });
-    } else {
-      
-      ThemeDataService.create(data)
-              .then(response => {
-                console.log(response.data);
-              })
-              .catch(e => {
-                console.log(e);
-              });
-      this.themes.push(this.editedItem);
     }
 
     this.close();

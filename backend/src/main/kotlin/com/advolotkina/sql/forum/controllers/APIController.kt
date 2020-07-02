@@ -18,9 +18,4 @@ class APIController {
     @GetMapping("/groups")
     fun getGroups() = groupRepository.findAll()
 
-
-    @GetMapping("/roles")
-    fun getRoles() = roleRepository.findAll()
-
-
 }

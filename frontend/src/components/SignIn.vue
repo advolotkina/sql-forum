@@ -8,17 +8,6 @@
         class="mb-2"
       >
         <div>
-          <b-alert
-            :show="dismissCountDown"
-            dismissible
-            variant="danger"
-            @dismissed="dismissCountDown = 0"
-            @dismiss-count-down="countDownChanged"
-          >
-            {{ alertMessage }}
-          </b-alert>
-        </div>
-        <div>
           <b-form-input type="text" placeholder="Login" v-model="user.login" />
           <div class="mt-2"></div>
 
@@ -94,10 +83,6 @@ export default class SignIn extends Vue {
               if (error.response) {
                 this.message = error.response.data.message;
                 this.errorDialog = true;
-                // console.log(error.response.data);
-                //
-                // console.log(error.response.status);
-                // console.log(error.response.headers);
               }
             });
   }

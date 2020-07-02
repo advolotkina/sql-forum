@@ -6,7 +6,7 @@ import BootstrapVue from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 import vuetify from '@/plugins/vuetify';
-import Vuelidate from 'vuelidate';
+import Vuelidate from "vuelidate";
 import VueMoment from "vue-moment";
 
 Vue.config.productionTip = false;

@@ -44,8 +44,10 @@ class ThemesController {
     fun updateTheme(@PathVariable id: Int, @RequestBody updateTheme: SaveThemeRequest): ResponseEntity<*> {
         val themeCandidate: Optional<ThemeEntity> = themeRepository.findById(id)
         if (themeCandidate.isPresent) {
-            val groupCandidate: Optional<GroupEntity> = groupRepository.findById(updateTheme.groupId)
-            if (groupCandidate.isPresent) {
+                if (nameExists(updateTheme.name)) {
+                    return ResponseEntity(ResponseMessage("This theme name exists"),
+                            HttpStatus.BAD_REQUEST)
+                }
                 try {
                     val theme = themeCandidate.get()
                     theme.name = updateTheme.name
@@ -55,9 +57,6 @@ class ThemesController {
                             HttpStatus.SERVICE_UNAVAILABLE)
                 }
                 return ResponseEntity(ResponseMessage("Theme updated"), HttpStatus.OK)
-            }
-            return ResponseEntity(ResponseMessage("Group not found"),
-                    HttpStatus.BAD_REQUEST)
         }
 
         return ResponseEntity(ResponseMessage("Theme not found"),

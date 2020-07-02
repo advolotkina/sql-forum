@@ -24,6 +24,14 @@ const routes: Array<RouteConfig> = [
     },
   },
   {
+    path: "/add_theme",
+    name: "Theme",
+    component: () => import("../components/AddTheme.vue"),
+    meta: {
+      permission: 'admin',
+    },
+  },
+  {
     path: "/register",
     name: "SignUp",
     component: () => import("../components/SignUp.vue")

@@ -58,7 +58,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import ThemeDataService from "../services/ThemeDataService";
-import mometn from "vue-moment";
+import moment from "vue-moment";
 
 @Component
 export default class Groups extends Vue {

@@ -2,10 +2,9 @@
   <div class="mx-auto">
     <table class="table table-striped">
       <thead>
-        <th>Theme name</th>
+        <th>Topic name</th>
         <th>Author</th>
         <th>Comments</th>
-        <th>Views</th>
         <th>Last comment</th>
       </thead>
       <tbody>
@@ -21,40 +20,17 @@
             </router-link>
           </td>
           <td>{{ topic.comments_count }}</td>
-          <td>{{ topic.views }}</td>
           <td>{{ topic.last_comment | moment("from")}}</td>
         </tr>
       </tbody>
     </table>
-<!--    <div class="form-group" v-if="this.$store.getters.isAuthenticated">-->
-<!--      <label for="name">Topic Name</label>-->
-<!--      <input-->
-<!--        type="text"-->
-<!--        v-model="topic.name"-->
-<!--        class="form-control"-->
-<!--        id="name"-->
-<!--        placeholder="Topic name..."-->
-<!--        maxlength="250"-->
-<!--        required-->
-<!--      />-->
-<!--      <label for="description">Topic Description</label>-->
-<!--      <input-->
-<!--        type="text"-->
-<!--        v-model="topic.description"-->
-<!--        class="form-control"-->
-<!--        id="description"-->
-<!--        placeholder="Topic description..."-->
-<!--        maxlength="250"-->
-<!--        required-->
-<!--      />-->
-<!--      <b-button variant="success" @click="createTopic">Create Topic </b-button>-->
-<!--    </div>-->
     <div v-if="this.$store.getters.isAuthenticated">
+      <v-form ref="form"
+              v-model="valid"
+              lazy-validation
+              max-width="500px">
     <v-card>
       <v-toolbar
-              flat
-              color="blue-grey"
-              dark
       >
         <v-toolbar-title>New Topic</v-toolbar-title>
       </v-toolbar>
@@ -62,7 +38,7 @@
         <v-text-field
                 filled label="Title"
                 value=""
-                required
+                :rules="[rules.required]"
                 v-model="topic.name"
                 :counter="255"
         ></v-text-field>
@@ -71,7 +47,7 @@
                 filled
                 v-model = "topic.description"
                 label="Text"
-                required
+                :rules="[rules.required, rules.min]"
                 value=""
         ></v-textarea>
       </v-card-text>
@@ -89,7 +65,25 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+      </v-form>
     </div>
+    <v-dialog v-model="errorDialog" max-width="500px">
+      <v-card>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12" sm="6" md="4">
+                <v-textarea v-text="message"></v-textarea>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="ok">OK</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -97,15 +91,14 @@
 import { Component, Vue } from "vue-property-decorator";
 import ThemeDataService from "../services/ThemeDataService";
 import TopicService from "@/services/TopicService";
-import { validationMixin } from 'vuelidate';
-import { required, maxLength, email } from 'vuelidate/lib/validators';
 import moment from "vue-moment";
 
 @Component
 export default class ThemeInfo extends Vue {
   private currentTheme: any = null;
-  private message = "";
   private currPath = "";
+  private message: any = "";
+  private errorDialog = false;
 
   private topic: any = {
     id: null,
@@ -113,7 +106,24 @@ export default class ThemeInfo extends Vue {
     description: ""
   };
 
+  valid = false;
+  rules: any =  {
+    required: value => !!value || 'Required.',
+    min: v => v.length >= 8 || 'Min 8 characters'
+  }
+
+  ok(){
+    this.message = "";
+    this.errorDialog = false;
+  }
+  validate(): boolean {
+    return (this.$refs.form as Vue & { validate: () => boolean }).validate();
+  }
+
   createTopic() {
+    if(!this.validate()){
+      return;
+    }
     const data = {
       name: this.topic.name,
       description: this.topic.description,
@@ -126,9 +136,12 @@ export default class ThemeInfo extends Vue {
         this.topic.description = "";
         this.getTheme(this.$route.params.id);
       })
-      .catch(e => {
-        console.log(e);
-      });
+            .catch((error) => {
+              if (error.response) {
+                this.message = error.response.data.message;
+                this.errorDialog = true;
+              }
+            });
   }
   getTheme(id: string) {
     ThemeDataService.get(id)
@@ -136,9 +149,12 @@ export default class ThemeInfo extends Vue {
         this.currentTheme = response.data;
         console.log(response.data);
       })
-      .catch(e => {
-        console.log(e);
-      });
+            .catch((error) => {
+              if (error.response) {
+                this.message = error.response.data.message;
+                this.errorDialog = true;
+              }
+            });
   }
 
   mounted() {
