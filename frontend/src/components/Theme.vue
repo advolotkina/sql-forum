@@ -125,7 +125,7 @@ export default class Themes extends Vue {
   deleteItem(item) {
     const index = this.themes.indexOf(item);
     if (confirm("Are you sure you want to delete this item?")){
-      console.log(item.id)
+      console.log(item.id);
       ThemeDataService.delete(item.id)
               .then((response) => {
                 console.log(response.data);

@@ -12,14 +12,20 @@ class CommentEntity(
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Int,
 
-        @Column(nullable = false)
-        var comment_text: String,
+        @Column(name="comment_text", nullable = false)
+        var commentText: String,
 
         @Column
         var datetime: Timestamp? = Timestamp(System.currentTimeMillis()),
 
         @Column
         var url: String? = "",
+
+        @Column(name="is_modified")
+        var isModified: Boolean? = false,
+
+        @Column(name="modification_date")
+        var modificationDate: Timestamp? = null,
 
         @JsonBackReference
         @ManyToOne(fetch = FetchType.LAZY)

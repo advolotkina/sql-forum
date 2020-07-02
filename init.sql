@@ -54,6 +54,8 @@ create table comments(
     id serial primary key,
     comment_text text,
     datetime timestamp default current_timestamp,
+    isModified bool default false,
+    modificationDate timestamp default current_timestamp,
     topic_id integer references topics(id) on delete cascade,
     author_id integer references users(id)
 );

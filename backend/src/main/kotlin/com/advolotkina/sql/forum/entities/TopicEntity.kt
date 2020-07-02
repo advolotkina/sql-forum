@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference
 import java.sql.Timestamp
 import java.time.Instant
 import javax.persistence.*
+import javax.swing.text.StyledEditorKit
 
 @Entity
 @Table(name = "topics")
@@ -30,6 +31,12 @@ class TopicEntity(
 
         @Column
         var comments_count: Int? = 0,
+
+        @Column(name="is_modified")
+        var isModified: Boolean = false,
+
+        @Column(name="modification_date")
+        var modificationDate: Timestamp? = null,
 
         @Column
         val url: String? = "/themes/topics/$id",
