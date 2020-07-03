@@ -154,12 +154,12 @@
                               v-model="valid"
                               lazy-validation>
               <v-row>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field
+                <v-col cols="12">
+                  <v-textarea
                           v-model="editedComment.text"
                           label="Comment text"
                           :rules="[rules.required]"
-                  ></v-text-field>
+                  ></v-textarea>
                 </v-col>
               </v-row>
             </v-form>
@@ -180,12 +180,12 @@
                               v-model="valid"
                               lazy-validation>
               <v-row>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field
+                <v-col cols="12">
+                  <v-textarea
                           v-model="editedTopic.text"
                           label="Topic text"
                           :rules="[rules.required]"
-                  ></v-text-field>
+                  ></v-textarea>
                 </v-col>
               </v-row>
             </v-form>

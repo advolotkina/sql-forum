@@ -27,7 +27,7 @@ class TopicEntity(
         var views: Int? = 0,
 
         @Column
-        var last_comment: Timestamp? = Timestamp(System.currentTimeMillis()),
+        var last_comment: Timestamp? = null,
 
         @Column
         var comments_count: Int? = 0,
