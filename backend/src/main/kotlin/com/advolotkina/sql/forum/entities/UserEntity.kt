@@ -38,9 +38,6 @@ class UserEntity(
         val last_comment: Timestamp? = null,
 
         @Column
-        var timezone_offset: Int? = 0,
-
-        @Column
         var location: String? = "",
 
         @Column

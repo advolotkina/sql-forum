@@ -38,9 +38,6 @@ class TopicEntity(
         @Column(name="modification_date")
         var modificationDate: Timestamp? = null,
 
-        @Column
-        val url: String? = "/themes/topics/$id",
-
         @JsonBackReference
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "theme_id")

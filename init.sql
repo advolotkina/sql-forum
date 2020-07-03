@@ -12,12 +12,11 @@ create table users (
     profession varchar(255),
     extra_info text,
     signature text,
-    user_pic varchar(255),
+    user_pic varchar(255) default '',
     registration_date timestamp default current_timestamp,
     is_banned boolean default false,
     comments_count integer default 0,
     last_comment timestamp,
-    timezone_offset integer,
     role_id integer references roles(id)
 );
 create table groups(
@@ -45,6 +44,8 @@ create table topics(
     description text not null,
     creation_datetime timestamp,
     views integer default 0,
+    is_modified bool default false,
+    modification_date timestamp default current_timestamp,
     last_comment timestamp,
     comments_count integer default 0,
     theme_id integer references themes(id),
@@ -54,8 +55,8 @@ create table comments(
     id serial primary key,
     comment_text text,
     datetime timestamp default current_timestamp,
-    isModified bool default false,
-    modificationDate timestamp default current_timestamp,
+    is_modified bool default false,
+    modification_date timestamp default current_timestamp,
     topic_id integer references topics(id) on delete cascade,
     author_id integer references users(id)
 );
@@ -99,6 +100,17 @@ $comments_count_and_datetime_update$ LANGUAGE plpgsql;
 CREATE TRIGGER comments_count_and_datetime_update
 AFTER INSERT OR DELETE ON comments
     FOR EACH ROW EXECUTE PROCEDURE update_comments_count_and_datetime();
+
+CREATE OR REPLACE FUNCTION update_comments_count_after_topic_delete() RETURNS TRIGGER AS $update_comments_count_after_topic_delete$
+BEGIN
+    update themes set comments_count = comments_count - OLD.comments_count where id = OLD.theme_id;
+    RETURN OLD;
+END;
+$update_comments_count_after_topic_delete$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_comments_count_after_topic_delete
+    AFTER DELETE ON topics
+    FOR EACH ROW EXECUTE PROCEDURE update_comments_count_after_topic_delete();
 
 SET TIME ZONE 'UTC';
 

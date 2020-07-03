@@ -18,9 +18,6 @@ class CommentEntity(
         @Column
         var datetime: Timestamp? = Timestamp(System.currentTimeMillis()),
 
-        @Column
-        var url: String? = "",
-
         @Column(name="is_modified")
         var isModified: Boolean? = false,
 

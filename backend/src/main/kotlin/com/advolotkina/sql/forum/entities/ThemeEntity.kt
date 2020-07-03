@@ -24,9 +24,6 @@ class ThemeEntity(
         @Column
         var last_comment: Timestamp = Timestamp(System.currentTimeMillis()),
 
-        @Column
-        var url: String = "/themes/$id",
-
         @JsonBackReference
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "group_id")
